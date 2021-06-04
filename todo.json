@@ -1,0 +1,23 @@
+[
+    {
+        "listName": "weekly",
+        "tasks": [
+            {"shower": "False"},
+            {"grocery shopping": "False"},
+            {"do dishes":"True"}
+        ]
+    },
+    {
+        "listName":"Programming",
+        "tasks":[
+            {"make 2 projects":"False"},
+            {"Modify portfolio":"False"}
+        ]
+    },
+    {
+        "listName":"Job Hunt",
+        "tasks":[
+            {"apply to 10 jobs": "False"}
+        ]
+    }
+]
