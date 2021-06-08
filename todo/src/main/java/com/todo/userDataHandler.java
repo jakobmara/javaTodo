@@ -4,6 +4,7 @@ import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ import org.json.simple.parser.ParseException;
 
 public class userDataHandler {
     private static Map<String, TodoList> todoLists = new HashMap<>();
-
+    private static JSONArray todoListsJson = new JSONArray(); 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) 
     {
@@ -43,6 +44,7 @@ public class userDataHandler {
                 JSONObject list = (JSONObject) todoList.get(i);
                 TodoList newList = new TodoList(list);
                 System.out.println(newList);
+                addList(newList);
                 todoLists.put(newList.listName,newList);
             }
             
@@ -71,23 +73,46 @@ public class userDataHandler {
     public ArrayList<String> getTasks(String listName){
         ArrayList<String> tasks = new ArrayList<>();
 
-        Map<String,Boolean> todoList = todoLists.get(listName);
+        TodoList todoList = todoLists.get(listName);
 
-        for (String key : todoList.keySet()){
-            String task;
-            System.out.println(key);
-            //String isComplete = Boolean.parseBoolean(todoList.get(key));
-            System.out.println(todoList.get(key));
-            
-            if(todoList.get(key)){
-                task = String.format("<html><strike>%s</strike></html>",key);
-            }else{
-                task = key;
-            }
-            tasks.add(task);            
-        }
+        tasks = todoList.getTasks(listName);
 
         return tasks;
+
+    }
+
+    //This function adds a list to the JSONarray object (which gets written to file)
+    public void addList(TodoList newList){
+
+        JSONObject listDetails = new JSONObject();
+
+        JSONArray listTasks = new JSONArray();
+
+        for(Task tasks : newList.tasks){
+            JSONObject taskJson = new JSONObject();
+            taskJson.put(tasks.taskName,Boolean.toString(tasks.taskStatus));
+            listTasks.add(taskJson);
+        }
+        listDetails.put("listName",newList.listName);
+        listDetails.put("tasks",listTasks);
+        todoListsJson.add(listDetails);
+
+
+    }
+
+    //this function creates a new list puts it in hashmap and jsonArray and updates list file
+    public void createList(TodoList newList){
+        todoLists.put(newList.listName,newList);
+
+        addList(newList);
+        try (FileWriter file = new FileWriter("todo.json")) {
+            //We can write any JSONArray or JSONObject instance to the file
+            file.write(todoListsJson.toJSONString()); 
+            file.flush();
+ 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
     

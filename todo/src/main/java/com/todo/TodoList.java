@@ -10,9 +10,9 @@ import org.json.simple.JSONObject;
 public class TodoList {
     
     String listName;
-    public ArrayList<Task> tasks;
+    public ArrayList<Task> tasks = new ArrayList<>();
 
-    TodoList(JSONObject list){
+    public TodoList(JSONObject list){
         //Get employee object within list
         this.listName = (String) list.get("listName");
         //Get employee first name
@@ -26,8 +26,24 @@ public class TodoList {
         }
         
     }
+    
+    public TodoList(String newListName, ArrayList<Task> newTasks) {
+        this.listName = newListName;
+        this.tasks = newTasks;
+    }
 
     public String toString(){
         return String.format("ListName: %s tasks: %s",this.listName,this.tasks);
     }
+
+    public ArrayList<String> getTasks(String listName){
+        ArrayList<String> desTasks = new ArrayList<>();
+
+        for (Task task : this.tasks){
+            desTasks.add(task.taskName);
+        }
+        return desTasks;
+
+    }
+
 }
