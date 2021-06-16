@@ -23,4 +23,13 @@ public class Task {
         return String.format("Task name: %s, status: %s",this.taskDispName,this.taskStatus);
     }
 
+    public void updateTask(){
+        this.taskStatus = !taskStatus;
+        if (this.taskStatus == true){
+            this.taskDispName = String.format("<html><strike>%s</strike></html>",taskName);
+        }else{
+            this.taskDispName = this.taskName;
+        }
+    }
+
 }

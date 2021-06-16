@@ -75,20 +75,28 @@ public class userDataHandler {
 
         TodoList todoList = todoLists.get(listName);
 
-        tasks = todoList.getTasks(listName);
+        tasks = todoList.getTasksToStrings();
 
         return tasks;
 
     }
+    
+    public Boolean getTaskStatus(String listName, String taskName){
+        TodoList curTodo = todoLists.get(listName);
+        return curTodo.getTaskStatus(taskName);
+
+    }
 
     //This function adds a list to the JSONarray object (which gets written to file)
+    //modify this function so it uses getJSON
+    //modify this function so it uses update
     public void addList(TodoList newList){
 
         JSONObject listDetails = new JSONObject();
 
         JSONArray listTasks = new JSONArray();
 
-        for(Task tasks : newList.tasks){
+        for(Task tasks : newList.getTasks()){
             JSONObject taskJson = new JSONObject();
             taskJson.put(tasks.taskName,Boolean.toString(tasks.taskStatus));
             listTasks.add(taskJson);
@@ -114,6 +122,53 @@ public class userDataHandler {
             e.printStackTrace();
         }
 
+    }
+
+    public void removeList(String listName){
+        todoLists.remove(listName);
+        updateJson();
+
+    }
+
+    public void removeTask(String listName, String taskName){
+        todoLists.get(listName).remove(taskName);
+        updateJson();
+
+    }
+
+    public void addTask(String taskName, String listName){
+        Task newTask = new Task(taskName, false);
+        TodoList modifiedList = todoLists.get(listName);
+
+        modifiedList.add(newTask);
+        updateJson();
+    }
+
+    public Task updateList(String listName, String taskName){
+        Task updatedTask = todoLists.get(listName).updateTask(taskName);
+        updateJson();
+        return updatedTask;
+
+    }
+
+    public void updateJson(){
+        //this function goes through the map of lists and creates JSON objects to add to JSONarray
+        //then writes JSON array to file
+        todoListsJson.clear();
+
+        for (TodoList curList : todoLists.values()){
+            todoListsJson.add(curList.getJSON());
+        }
+
+
+        try (FileWriter file = new FileWriter("todo.json")) {
+            //We can write any JSONArray or JSONObject instance to the file
+            file.write(todoListsJson.toJSONString()); 
+            file.flush();
+ 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
 
