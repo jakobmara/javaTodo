@@ -1,7 +1,6 @@
 package com.todo;
 
-import java.awt.font.TextAttribute;
-import java.io.File;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -37,13 +35,11 @@ public class userDataHandler {
             Object obj = jsonParser.parse(reader);
     
             JSONArray todoList = (JSONArray) obj;
-            System.out.println(todoList);
                        
             
             for(int i = 0; i < todoList.size(); i++){
                 JSONObject list = (JSONObject) todoList.get(i);
                 TodoList newList = new TodoList(list);
-                System.out.println(newList);
                 addList(newList);
                 todoLists.put(newList.listName,newList);
             }
@@ -62,8 +58,6 @@ public class userDataHandler {
         ArrayList<String> listNames = new ArrayList<>();
 
         for(String listName: todoLists.keySet()){
-            System.out.println("keys");
-            System.out.println(listName);
             listNames.add(listName);
         }
 

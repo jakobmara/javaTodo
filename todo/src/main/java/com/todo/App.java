@@ -28,7 +28,7 @@ public class App
       final JLabel tasksLabel = new JLabel();
       final DefaultListModel<String> tasks = new DefaultListModel<>(); 
       final JList<String> todoTasks = new JList<>(tasks);
-      final JButton taskButton = new JButton();
+      final JButton taskButton = new JButton("Mark as complete");
       
       //idk if these need to be final
       final JButton removeListButton = new JButton("Remove List");
@@ -55,8 +55,9 @@ public class App
 
       addTask.setBounds(400,200,120,35);
       addTask.setEnabled(false);
-      taskButton.setText("Mark as complete");
-      taskButton.setBounds(700,100,200,50);
+      taskButton.setEnabled(false);
+      removeTaskButton.setEnabled(false);
+      taskButton.setBounds(660,100,150,35);
 
 
       addList.addActionListener(new ActionListener(){
@@ -94,20 +95,19 @@ public class App
 
          @Override
          public void valueChanged(ListSelectionEvent e) {
-
+            taskButton.setEnabled(true);
+            removeTaskButton.setEnabled(true);
             String listName = todoLists.getSelectedValue().toString();
             try {
                String taskName = todoTasks.getSelectedValue().toString();
-               System.out.println("TASK NAME: " + taskName);
                Boolean isComp = udh.getTaskStatus(listName, taskName);
                if (isComp){
-                  taskButton.setText("unmark");
+                  taskButton.setText("Unmark task");
                }else{
-                  taskButton.setText("mark");
+                  taskButton.setText("Mark as complete");
                }
             } catch (Exception newE) {
                //TODO: handle exception
-               System.out.println("switching lists");
             }
             //check to see if its been marked as completed or not, and set
             //the button completetion text "mark as complete" or "unmark"
@@ -130,13 +130,12 @@ public class App
 
                tasks.set(taskInd,updatedTask.taskDispName);
                if (updatedTask.taskStatus){
-                  taskButton.setText("unmark");
+                  taskButton.setText("Unmark task");
                }else{
-                  taskButton.setText("mark");
+                  taskButton.setText("Mark as complete");
                }
 
 
-               System.out.println("Updated");
             }
          }
 
@@ -172,7 +171,7 @@ public class App
             // TODO Auto-generated method stub
             String removedListName = todoLists.getSelectedValue().toString();
             int curIndex = todoLists.getSelectedIndex();
-            DefaultListModel newMod = (DefaultListModel) todoLists.getModel();
+            DefaultListModel<String> newMod = (DefaultListModel<String>) todoLists.getModel();
             newMod.removeElementAt(curIndex);//this is supposed to be index of what task is currently selectred
             udh.removeList(removedListName);
 
@@ -204,7 +203,7 @@ public class App
 
    }
 
-   public static void createTask(final String listName, final DefaultListModel taskList){
+   public static void createTask(final String listName, final DefaultListModel<String> taskList){
       final JFrame f = new JFrame();
 
       f.setSize(250,250);
@@ -229,7 +228,6 @@ public class App
             // TODO Auto-generated method stub
             String newTask = taskjArea.getText();
             udh.addTask(newTask, listName);
-            
             taskList.addElement(newTask);
          }
 
