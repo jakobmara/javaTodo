@@ -22,6 +22,7 @@ public class App
     public static void main( String[] args )
     {
       JFrame f= new JFrame();
+      f.setTitle("Todo List");
       udh.loadUserLists();
       f.setSize(900,900);
       final JLabel listLabel = new JLabel();
@@ -43,21 +44,21 @@ public class App
       displayLists();
 
       removeListButton.setBounds(130,200,120,35);
-      removeTaskButton.setBounds(550,200,120,35);
+      removeTaskButton.setBounds(550,325,120,35);
 
 
       todoLists.setBounds(0,60,250,125);
       tasksLabel.setBounds(400, 0, 200,100);  
       tasksLabel.setText("Tasks");
       f.add(tasksLabel);
-      todoTasks.setBounds(400,60,250,125);
+      todoTasks.setBounds(400,60,250,250);
       addList.setBounds(0,200,120,35);
 
-      addTask.setBounds(400,200,120,35);
+      addTask.setBounds(400,325,120,35);
       addTask.setEnabled(false);
       taskButton.setEnabled(false);
       removeTaskButton.setEnabled(false);
-      taskButton.setBounds(660,100,150,35);
+      taskButton.setBounds(660,165,150,35);
 
 
       addList.addActionListener(new ActionListener(){
@@ -102,15 +103,14 @@ public class App
                String taskName = todoTasks.getSelectedValue().toString();
                Boolean isComp = udh.getTaskStatus(listName, taskName);
                if (isComp){
-                  taskButton.setText("Unmark task");
+                  taskButton.setText("Mark as incomplete");
                }else{
                   taskButton.setText("Mark as complete");
                }
             } catch (Exception newE) {
                //TODO: handle exception
             }
-            //check to see if its been marked as completed or not, and set
-            //the button completetion text "mark as complete" or "unmark"
+            
             
             
          }
@@ -130,7 +130,7 @@ public class App
 
                tasks.set(taskInd,updatedTask.taskDispName);
                if (updatedTask.taskStatus){
-                  taskButton.setText("Unmark task");
+                  taskButton.setText("Mark as incomplete");
                }else{
                   taskButton.setText("Mark as complete");
                }
@@ -174,6 +174,7 @@ public class App
             DefaultListModel<String> newMod = (DefaultListModel<String>) todoLists.getModel();
             newMod.removeElementAt(curIndex);//this is supposed to be index of what task is currently selectred
             udh.removeList(removedListName);
+            tasks.clear();
 
          }
 

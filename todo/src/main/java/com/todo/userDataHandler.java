@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 public class userDataHandler {
     private static Map<String, TodoList> todoLists = new HashMap<>();
     private static JSONArray todoListsJson = new JSONArray(); 
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) 
     {
         
